@@ -1,5 +1,6 @@
 ﻿#region Create Order
 using FactoryPattern.Business;
+using FactoryPattern.Business.Models.Commerce;
 
 Console.Write("Recipient Country: ");
 var recipientCountry = Console.ReadLine().Trim();
