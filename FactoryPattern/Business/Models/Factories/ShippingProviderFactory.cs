@@ -4,11 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FactoryPattern.Business.Models.Shipping
+namespace FactoryPattern.Business.Models.Shipping.Factories
 {
-    public class ShippingProviderFactory
+    // the factory method
+    public abstract class ShippingProviderFactory
     {
-        public static ShippingProvider CreateShippingProvider(string country)
+        // we can choose the access modifier per use case, e.g., protected, public
+        protected abstract ShippingProvider CreateShippingProvider(string country);
+
+        // this method allows us to change common things before the object is returned to the client
+        // you can also inject things into the creation of provider before it requests an instantiation of the product
+        public ShippingProvider GetShippingProvider(string country)
+        {
+            var provider = CreateShippingProvider(country);
+
+            // inject things before returning the object
+            if (country == "Sweden" && provider.InsuranceOptions.ProviderHasInsurance)
+                provider.RequireSignature = false;
+
+            return provider;
+        }
+    }
+    public class StandardShippingProviderFactory : ShippingProviderFactory
+    {
+        protected override ShippingProvider CreateShippingProvider(string country)
         {
             #region Create Shipping Provider
             ShippingProvider shippingProvider;
@@ -79,6 +98,14 @@ namespace FactoryPattern.Business.Models.Shipping
             #endregion
 
             return shippingProvider;
+        }
+    }
+
+    public class GlobalExpressShippingProviderFactory : ShippingProviderFactory
+    {
+        protected override ShippingProvider CreateShippingProvider(string country)
+        {
+            return new GlobalExpressShippingProvider();
         }
     }
 }

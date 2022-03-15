@@ -1,6 +1,7 @@
 ﻿#region Create Order
 using FactoryPattern.Business;
 using FactoryPattern.Business.Models.Commerce;
+using FactoryPattern.Business.Models.Shipping.Factories;
 
 Console.Write("Recipient Country: ");
 var recipientCountry = Console.ReadLine().Trim();
@@ -32,7 +33,9 @@ order.LineItems.Add(new Item("CSHARP_SMORGASBORD", "C# Smorgasbord", 100m), 1);
 order.LineItems.Add(new Item("CONSULTING", "Building a website", 100m), 1);
 #endregion
 
-var cart = new ShoppingCart(order);
+// the shopping cart is decoupled from the creation of the particular shipping provider.
+var cart = new ShoppingCart(order, new StandardShippingProviderFactory());
+//var cart = new ShoppingCart(order, new GlobalExpressShippingProviderFactory());
 
 var shippingLabel = cart.Finalize();
 
