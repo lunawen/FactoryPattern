@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FactoryPattern.Business.Models.Shipping.Factories
 {
-    // the factory method
     public abstract class ShippingProviderFactory
     {
+        // the factory method
         // we can choose the access modifier per use case, e.g., protected, public
         protected abstract ShippingProvider CreateShippingProvider(string country);
 
