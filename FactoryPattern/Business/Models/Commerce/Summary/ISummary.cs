@@ -22,7 +22,7 @@ namespace FactoryPattern.Business.Models.Commerce.Summary
 
         public void Send()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Sent");
         }
     }
 
