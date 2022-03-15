@@ -33,9 +33,22 @@ order.LineItems.Add(new Item("CSHARP_SMORGASBORD", "C# Smorgasbord", 100m), 1);
 order.LineItems.Add(new Item("CONSULTING", "Building a website", 100m), 1);
 #endregion
 
-// the shopping cart is decoupled from the creation of the particular shipping provider.
-var cart = new ShoppingCart(order, new StandardShippingProviderFactory());
-//var cart = new ShoppingCart(order, new GlobalExpressShippingProviderFactory());
+IPurchaseProviderFactory purchaseProviderFactory;
+
+if (order.Sender.Country == "Sweden")
+{
+    purchaseProviderFactory = new SwedenPurchaseProviderFactory();
+}
+else if (order.Sender.Country == "Australia")
+{
+    purchaseProviderFactory = new AustraliaPurchaseProviderFactory();
+}
+else
+{
+    throw new Exception("Sender country not supported");
+}
+
+var cart = new ShoppingCart(order, purchaseProviderFactory);
 
 var shippingLabel = cart.Finalize();
 
