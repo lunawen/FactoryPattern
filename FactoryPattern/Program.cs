@@ -35,17 +35,13 @@ order.LineItems.Add(new Item("CONSULTING", "Building a website", 100m), 1);
 
 IPurchaseProviderFactory purchaseProviderFactory;
 
-if (order.Sender.Country == "Sweden")
+var factoryProvider = new PurchaseProviderFactoryProvider();
+
+purchaseProviderFactory = factoryProvider.CreateFactoryFor(order.Sender.Country);
+
+if (purchaseProviderFactory == null)
 {
-    purchaseProviderFactory = new SwedenPurchaseProviderFactory();
-}
-else if (order.Sender.Country == "Australia")
-{
-    purchaseProviderFactory = new AustraliaPurchaseProviderFactory();
-}
-else
-{
-    throw new Exception("Sender country not supported");
+    throw new Exception("Sender country has no purchase provider");
 }
 
 var cart = new ShoppingCart(order, purchaseProviderFactory);
